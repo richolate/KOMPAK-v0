@@ -1,5 +1,80 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import bpsLogo from "./assets/bpslogo.webp";
+
+const solutions = [
+  {
+    id: "01",
+    title: "Integrasi Satu Data Daerah",
+    shortDesc: "Menghubungkan data sektoral OPD dan statistik BPS dalam satu wadah.",
+    badge: "KETERPADUAN DATA",
+    heading: "Kolaborasi Data Terpusat & Sinkron",
+    description:
+      "Menghilangkan ego sektoral antar OPD dengan standardisasi format data dan metadata statistik resmi dari BPS demi mewujudkan Satu Data Indonesia.",
+    statNumber: "100%",
+    statLabel: "Terintegrasi dalam satu pintu portal data",
+    theme: "from-[#004499] to-[#0192C6]",
+    accentBg: "bg-blue-500/20",
+    bgPattern: "radial-gradient(circle at 80% 20%, rgba(241,255,98,0.15) 0%, transparent 60%)",
+    metrics: [
+      { label: "SOP Satu Data", value: "Standar BPS" },
+      { label: "Format Berbagi Pakai", value: "Terbuka & API" },
+    ],
+  },
+  {
+    id: "02",
+    title: "Akses Cepat & Transparan",
+    shortDesc: "Pencarian dan pemanfaatan data statistik yang mudah bagi publik dan instansi.",
+    badge: "AKSESIBILITAS TINGGI",
+    heading: "Kemudahan Temu Kembali Data Publik",
+    description:
+      "Aparatur sipil, akademisi, dan masyarakat luas dapat menelusuri rilis data, tabel indikator, dan metadata dengan cepat tanpa birokrasi berbelit.",
+    statNumber: "< 3 Detik",
+    statLabel: "Kecepatan akses penelusuran indikator",
+    theme: "from-[#112358] to-[#004499]",
+    accentBg: "bg-[#0192C6]/20",
+    bgPattern: "radial-gradient(circle at 20% 80%, rgba(1,146,198,0.2) 0%, transparent 65%)",
+    metrics: [
+      { label: "Ketersediaan Layanan", value: "24/7 Daring" },
+      { label: "Akses Unduh", value: "Excel / PDF / CSV" },
+    ],
+  },
+  {
+    id: "03",
+    title: "Visualisasi & Analisis Cerdas",
+    shortDesc: "Tampilan grafik interaktif dan ringkasan angka yang intuitif.",
+    badge: "EKSPLORASI INTERAKTIF",
+    heading: "Ubah Angka Menjadi Wawasan Strategis",
+    description:
+      "Dilengkapi ringkasan visual, tren tahunan, dan perbandingan lintas sektor yang langsung memberikan gambaran nyata dinamika sosial-ekonomi daerah.",
+    statNumber: "6 Sektor",
+    statLabel: "Visualisasi dinamika tematik daerah",
+    theme: "from-[#0192C6] to-[#004499]",
+    accentBg: "bg-[#F1FF62]/20",
+    bgPattern: "radial-gradient(circle at 75% 75%, rgba(241,255,98,0.2) 0%, transparent 60%)",
+    metrics: [
+      { label: "Gaya Visual", value: "Grafik & Peta Tematik" },
+      { label: "Tingkat Akurasi", value: "Validitas Terverifikasi" },
+    ],
+  },
+  {
+    id: "04",
+    title: "Perencanaan Berbasis Bukti",
+    shortDesc: "Dukungan akurat untuk pengambilan kebijakan dan evaluasi pembangunan.",
+    badge: "EVIDENCE-BASED POLICY",
+    heading: "Fondasi Kuat Pengambilan Keputusan",
+    description:
+      "Menjamin perumusan kebijakan pembangunan daerah, RKPD, dan evaluasi program bertumpu pada data valid, akuntabel, dan terukur secara ilmiah.",
+    statNumber: "Multi-OPD",
+    statLabel: "Sinkronisasi rencana kerja daerah",
+    theme: "from-[#0b1739] to-[#0192C6]",
+    accentBg: "bg-emerald-500/20",
+    bgPattern: "radial-gradient(circle at 50% 20%, rgba(1,146,198,0.25) 0%, transparent 70%)",
+    metrics: [
+      { label: "Dukungan Evaluasi", value: "Kinerja Nyata" },
+      { label: "Efektivitas Anggaran", value: "Tepat Sasaran" },
+    ],
+  },
+];
 
 const sectors = [
   { number: "01", name: "Pemerintahan", detail: "Tata kelola dan administrasi daerah" },
@@ -27,11 +102,38 @@ function MiniBars() {
 }
 
 function App() {
+  const [activeSolution, setActiveSolution] = useState(0);
+
+  const currentSolution = solutions[activeSolution];
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+          } else {
+            // Ketika elemen keluar dari viewport, reset class agar animasi terpicu kembali saat di-scroll lagi
+            entry.target.classList.remove("revealed");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    const revealElements = document.querySelectorAll(".reveal-init");
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
   return (
-    <div className="min-h-screen overflow-hidden bg-white text-[#112358]">
+    <div className="min-h-screen overflow-x-clip bg-white text-[#112358]">
       {/* NAVBAR */}
-      <header className="relative z-20 px-4 pt-4 sm:px-6 lg:px-10">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-100 bg-white/95 px-5 py-3 shadow-[0_8px_30px_rgba(17,35,88,0.07)] backdrop-blur-md sm:px-7">
+      <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6 lg:px-10">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-100 bg-white/90 px-5 py-3 shadow-[0_8px_30px_rgba(17,35,88,0.07)] backdrop-blur-md sm:px-7">
           <a href="#beranda" className="flex shrink-0 items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#112358] text-lg font-black text-[#F1FF62]">K</span>
             <span>
@@ -43,6 +145,7 @@ function App() {
           <div className="hidden items-center gap-7 text-xs font-semibold text-[#3F4F5F] lg:flex">
             <a className="rounded-full bg-[#D4EAFF]/60 px-4 py-2 text-[#004499]" href="#beranda">Beranda</a>
             <a className="transition hover:text-[#0192C6]" href="#tentang">Tentang</a>
+            <a className="transition hover:text-[#0192C6]" href="#solusi">Solusi & Manfaat</a>
             <a className="transition hover:text-[#0192C6]" href="#statistik">Statistik BPS</a>
             <a className="transition hover:text-[#0192C6]" href="#opd">Data OPD</a>
             <a className="transition hover:text-[#0192C6]" href="#berita">Informasi</a>
@@ -56,7 +159,7 @@ function App() {
 
       <main>
         {/* HERO */}
-        <section id="beranda" className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-12 pt-16 sm:px-10 lg:min-h-[610px] lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-12 lg:pt-14">
+        <section id="beranda" className="reveal-init relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-12 pt-16 sm:px-10 lg:min-h-[610px] lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-12 lg:pt-14">
           <div className="pointer-events-none absolute left-1/2 top-10 -z-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full border border-[#D4EAFF]/70 lg:left-[58%]" />
           <div className="pointer-events-none absolute left-[48%] top-24 -z-0 h-[390px] w-[390px] rounded-full border border-dashed border-[#0192C6]/20" />
 
@@ -90,7 +193,7 @@ function App() {
 
           {/* FOTO BPS */}
           <div className="relative z-10 mx-auto flex w-full max-w-[570px] items-center justify-center lg:ml-auto">
-            <div className="absolute -right-3 top-8 h-24 w-24 rounded-3xl bg-[#F1FF62]" />
+            <div className="absolute -right-3 top-8 h-24 w-24 rounded-3xl bg-[#F1FF62] animate-float" />
             <div className="absolute -bottom-4 -left-4 h-28 w-28 rounded-full bg-[#D4EAFF]" />
             <div className="relative flex min-h-[390px] w-full items-center justify-center overflow-hidden rounded-[2rem] border border-[#D4EAFF] bg-white p-6 shadow-[0_25px_70px_rgba(17,35,88,0.12)] sm:min-h-[480px] sm:p-9">
               <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#0192C6]/10 blur-2xl" />
@@ -98,10 +201,10 @@ function App() {
               <img
                 src={bpsLogo}
                 alt="Logo Badan Pusat Statistik"
-                className="relative z-10 h-auto max-h-[390px] w-full max-w-[430px] object-contain"
+                className="relative z-10 h-auto max-h-[390px] w-full max-w-[430px] object-contain transition-transform duration-500 hover:scale-105"
               />
             </div>
-            <div className="absolute -left-7 top-1/4 hidden rounded-2xl border border-slate-100 bg-white px-4 py-3 shadow-xl sm:block">
+            <div className="absolute -left-7 top-1/4 hidden rounded-2xl border border-slate-100 bg-white px-4 py-3 shadow-xl sm:block animate-float">
               <p className="text-[9px] font-semibold text-[#3F4F5F]">SUMBER DATA</p>
               <p className="mt-1 text-sm font-extrabold text-[#004499]">BPS + OPD</p>
             </div>
@@ -111,7 +214,7 @@ function App() {
         {/* HIGHLIGHT BAR */}
 
 {/* STATISTIK RINGKAS */}
-<section className="mx-auto max-w-7xl px-5 pb-20 sm:px-8 lg:px-10">
+<section className="reveal-init mx-auto max-w-7xl px-5 pb-20 sm:px-8 lg:px-10">
   <div className="rounded-[2rem] border border-slate-100 bg-white px-6 py-8 shadow-[0_15px_50px_rgba(17,35,88,0.06)] sm:px-10 sm:py-10">
 
     <div className="mb-8">
@@ -165,8 +268,154 @@ function App() {
   </div>
 </section>
 
+        {/* SECTION SOLUSI & MANFAAT (INTERAKTIF SEPERTI REFERENSI) */}
+        <section id="solusi" className="reveal-init mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10">
+          {/* HEADER SECTION */}
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div className="max-w-xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#D4EAFF] bg-[#D4EAFF]/50 px-3.5 py-1.5 text-[10px] font-extrabold tracking-[0.18em] text-[#004499]">
+                <span className="text-[#0192C6]">✦</span> SOLUSI & MANFAAT
+              </span>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#112358] sm:text-4xl lg:text-[2.65rem] lg:leading-[1.15]">
+                Solusi Data Terpadu untuk Setiap Kebutuhan Daerah
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-7 text-[#3F4F5F] lg:pb-1">
+              Baik untuk perumusan kebijakan dinas, riset akademis, maupun transparansi publik, KOMPAK GIMS menghadirkan ekosistem data yang aman, terintegrasi, dan mudah digunakan.
+            </p>
+          </div>
+
+          {/* MAIN CARD CONTAINER */}
+          <div className="mt-12 rounded-[2.5rem] bg-[#f8fafc] p-4 sm:p-7 lg:p-10 border border-slate-200/80 shadow-[0_15px_50px_rgba(17,35,88,0.04)]">
+            <div className="grid items-stretch gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
+              
+              {/* LIST PILIHAN MENU (KIRI) */}
+              <div className="flex flex-col justify-center gap-3.5">
+                {solutions.map((item, idx) => {
+                  const isActive = activeSolution === idx;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setActiveSolution(idx)}
+                      className={`group relative flex w-full items-center gap-4 rounded-2xl p-4 sm:p-5 text-left transition-all duration-300 ${
+                        isActive
+                          ? "bg-[#112358] text-white shadow-xl shadow-blue-950/20 translate-x-1"
+                          : "bg-white text-[#112358] hover:bg-white/80 hover:shadow-md border border-slate-200/60"
+                      }`}
+                    >
+                      {/* NOMOR ID */}
+                      <span
+                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xs font-black tracking-wider transition-colors ${
+                          isActive
+                            ? "bg-white/10 text-[#F1FF62]"
+                            : "bg-[#D4EAFF]/50 text-[#004499] group-hover:bg-[#D4EAFF]"
+                        }`}
+                      >
+                        {item.id}
+                      </span>
+
+                      {/* TEXT CONTENT */}
+                      <div className="flex-1 pr-2">
+                        <div className="flex items-center justify-between">
+                          <h3
+                            className={`text-sm font-extrabold sm:text-base ${
+                              isActive ? "text-white" : "text-[#112358]"
+                            }`}
+                          >
+                            {item.title}
+                          </h3>
+                          <span
+                            className={`text-xs transition-transform duration-300 ${
+                              isActive
+                                ? "text-[#F1FF62] translate-x-1"
+                                : "text-slate-400 group-hover:translate-x-1"
+                            }`}
+                          >
+                            →
+                          </span>
+                        </div>
+                        <p
+                          className={`mt-1 text-xs leading-relaxed ${
+                            isActive ? "text-slate-200" : "text-[#3F4F5F]"
+                          }`}
+                        >
+                          {item.shortDesc}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* ILUSTRASI GAMBAR & KARTU DINAMIS (KANAN) */}
+              <div className="relative min-h-[380px] sm:min-h-[440px] overflow-hidden rounded-[2rem] border border-white/20 p-7 sm:p-9 shadow-2xl flex flex-col justify-between transition-all duration-500 bg-gradient-to-br text-white">
+                {/* Background Dynamic Gradient */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${currentSolution.theme} transition-all duration-700`}
+                />
+
+                {/* Decorative Overlay Pattern */}
+                <div
+                  className="absolute inset-0 opacity-40 mix-blend-overlay transition-all duration-700 pointer-events-none"
+                  style={{ background: currentSolution.bgPattern }}
+                />
+
+                {/* Abstract Geometric Shapes */}
+                <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full border-[20px] border-white/10 pointer-events-none" />
+                <div className="absolute right-10 bottom-24 h-32 w-32 rounded-3xl border border-white/15 bg-white/5 backdrop-blur-sm -rotate-12 pointer-events-none" />
+                <div className="absolute left-6 top-1/2 h-20 w-20 rounded-full bg-[#F1FF62]/10 blur-xl pointer-events-none" />
+
+                {/* CONTENT TOP: BADGE & HEADLINE */}
+                <div className="relative z-10">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-[10px] font-extrabold tracking-widest uppercase backdrop-blur-md text-[#F1FF62]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#F1FF62] animate-pulse" />
+                    {currentSolution.badge}
+                  </div>
+                  <h3 className="mt-4 text-2xl font-black tracking-tight sm:text-3xl text-white leading-tight">
+                    {currentSolution.heading}
+                  </h3>
+                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-blue-100/90 max-w-md">
+                    {currentSolution.description}
+                  </p>
+                </div>
+
+                {/* VISUAL MINI METRICS TAGS */}
+                <div className="relative z-10 my-6 flex flex-wrap gap-2.5">
+                  {currentSolution.metrics.map((m, i) => (
+                    <div
+                      key={i}
+                      className="rounded-xl border border-white/15 bg-white/10 px-3 py-1.5 backdrop-blur-md"
+                    >
+                      <p className="text-[10px] uppercase font-semibold text-blue-200">{m.label}</p>
+                      <p className="text-xs font-extrabold text-white">{m.value}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* GLASSMORPHISM CARD STATISTIK DI BAGIAN BAWAH (PERSIS SEPERTI GAMBAR) */}
+                <div className="relative z-10 w-full overflow-hidden rounded-2xl border border-white/30 bg-white/20 p-5 sm:p-6 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.18)] transition-all duration-500">
+                  <div className="absolute -right-6 -bottom-6 h-24 w-24 rounded-full bg-[#F1FF62]/20 blur-xl" />
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-3xl sm:text-5xl font-black tracking-tight text-white drop-shadow-sm">
+                      {currentSolution.statNumber}
+                    </span>
+                    <span className="inline-flex items-center rounded-md bg-[#F1FF62] px-2 py-0.5 text-[10px] font-extrabold text-[#112358]">
+                      AKTIF
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-xs sm:text-sm font-medium text-blue-100">
+                    {currentSolution.statLabel}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* STATISTICS */}
-        <section id="statistik" className="bg-[#D4EAFF]/45 py-20">
+        <section id="statistik" className="reveal-init bg-[#D4EAFF]/45 py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-10">
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div><span className="text-[10px] font-extrabold tracking-[.22em] text-[#0192C6]">PUSAT INFORMASI</span><h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#112358] sm:text-4xl">Data Statistik dalam<br className="hidden sm:block" /> Satu Akses.</h2></div>
@@ -178,7 +427,7 @@ function App() {
                 ["▦", "Data Sektoral OPD", "Temukan data sektoral dari berbagai perangkat daerah dalam satu platform terintegrasi.", "Jelajahi Data OPD"],
                 ["▤", "Visualisasi Data", "Pahami informasi melalui penyajian data yang sistematis dan mudah dipahami.", "Lihat Visualisasi"],
               ].map(([icon, title, desc, link], i) => (
-                <article key={title} className="group rounded-3xl border border-white bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/10">
+                <article key={title} className={`reveal-init reveal-delay-${i + 1} group rounded-3xl border border-white bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-950/10`}>
                   <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#D4EAFF] text-xl font-bold text-[#004499]">{icon}</div>
                   <h3 className="mt-7 text-xl font-bold text-[#112358]">{title}</h3>
                   <p className="mt-3 min-h-[76px] text-sm leading-6 text-[#3F4F5F]">{desc}</p>
@@ -190,14 +439,14 @@ function App() {
         </section>
 
         {/* OPD SECTORS */}
-        <section id="opd" className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+        <section id="opd" className="reveal-init mx-auto max-w-7xl px-6 py-20 lg:px-10">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
             <div><span className="text-[10px] font-extrabold tracking-[.22em] text-[#0192C6]">KOLABORASI DATA</span><h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#112358] sm:text-4xl">Data dari Berbagai Sektor.</h2></div>
             <p className="max-w-sm text-sm leading-7 text-[#3F4F5F]">Mendukung keterpaduan data dari berbagai bidang pembangunan daerah.</p>
           </div>
           <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {sectors.map((sector) => (
-              <a href="#statistik" key={sector.number} className="group flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-[#0192C6]/50 hover:bg-[#D4EAFF]/35">
+            {sectors.map((sector, sIdx) => (
+              <a href="#statistik" key={sector.number} className={`reveal-init reveal-delay-${(sIdx % 3) + 1} group flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-[#0192C6]/50 hover:bg-[#D4EAFF]/35`}>
                 <div className="flex items-center gap-5"><span className="text-xs font-extrabold text-[#0192C6]">{sector.number}</span><div><h3 className="font-bold text-[#112358]">{sector.name}</h3><p className="mt-1 text-xs text-[#3F4F5F]">{sector.detail}</p></div></div>
                 <span className="text-lg text-[#3F4F5F]/50 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-[#004499]">↗</span>
               </a>
@@ -206,7 +455,7 @@ function App() {
         </section>
 
 {/* NEWS */}
-<section id="berita" className="relative overflow-hidden bg-[#D4EAFF]/35 py-24">
+<section id="berita" className="reveal-init relative overflow-hidden bg-[#D4EAFF]/35 py-24">
   <div className="mx-auto max-w-7xl px-6 lg:px-10">
 
     {/* HEADER */}
@@ -230,8 +479,7 @@ function App() {
       {news.map((item, index) => (
         <article
           key={item.title}
-          style={{ animationDelay: `${index * 150}ms` }}
-          className="group animate-[fadeUp_.7s_ease-out_both] overflow-hidden rounded-[26px] border border-white/80 bg-white shadow-[0_8px_30px_rgba(17,35,88,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,68,153,0.13)]"
+          className={`reveal-init reveal-delay-${index + 1} group overflow-hidden rounded-[26px] border border-white/80 bg-white shadow-[0_8px_30px_rgba(17,35,88,0.05)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,68,153,0.13)]`}
         >
 
           {/* IMAGE / DECORATIVE AREA */}
@@ -308,7 +556,7 @@ function App() {
 
 
         {/* CTA */}
-        <section id="masuk" className="mx-auto max-w-7xl px-3 py-5 lg:px-5">
+        <section id="masuk" className="reveal-init mx-auto max-w-7xl px-3 py-5 lg:px-5">
           <div className="relative overflow-hidden rounded-[2rem] bg-[#112358] px-7 py-14 text-center text-white sm:px-12">
             <div className="absolute -left-20 -top-32 h-72 w-72 rounded-full bg-[#0192C6]/30 blur-2xl" />
             <div className="absolute -bottom-40 -right-20 h-80 w-80 rounded-full bg-[#004499]/50 blur-2xl" />
